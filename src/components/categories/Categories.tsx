@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategories } from "../../api/fetchData";
+import { NavDropdown } from "react-bootstrap";
 
 function Categories() {
   const { data, isLoading, isError } = useQuery<string[]>({
@@ -12,12 +13,9 @@ function Categories() {
 
   return (
     <div>
-      <h1>Categories</h1>
-      <ul>
-        {data?.map((category, index: number) => (
-          <li key={index}>{category}</li>
-        ))}
-      </ul>
+      {data?.map((category, index: number) => (
+        <NavDropdown.Item key={index}>{category}</NavDropdown.Item>
+      ))}
     </div>
   );
 }

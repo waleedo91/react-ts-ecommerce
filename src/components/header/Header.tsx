@@ -1,3 +1,6 @@
+import Categories from "../categories/Categories";
+import Apu from "../../images/apu.png";
+
 import {
   Navbar,
   Container,
@@ -6,17 +9,29 @@ import {
   Button,
   Form,
 } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import "./Header.css";
 
-// TODO: Update Categories dropdown to reflect the fakestore api categories. 
-// TODO: Update Welcome Shopper to a login and logout button as well as the logged in users name rather than shopper. 
-// TODO: Change Link tab to a Cart Tab to navigate to the cart page. 
-// TODO: Come up with a name for actual site as a whole as well as a logo. 
+// TODO: Create link for categories that filter only products with that category. 
+// TODO: Update Welcome Shopper to a login and logout button as well as the logged in users name rather than shopper.
+// TODO: update cart logo to show how many items are currently in users cart. 
+
 
 const Header = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
       <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+        <Navbar.Brand href="#" className="brand-flex">
+          <img
+            alt=""
+            src={Apu}
+            width="50"
+            height="50"
+            className="d-inline-block align-top apu-brand"
+          />{" "}
+          Quick-ee-Mart
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -25,23 +40,16 @@ const Header = () => {
             navbarScroll
           >
             <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
+
             <NavDropdown title="Categories" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
+              <Categories />
             </NavDropdown>
           </Nav>
           <Form className="d-flex">
             <Form.Control
               type="search"
               placeholder="Search"
-              className="me-2"
+              className="me-2 search-input"
               aria-label="Search"
             />
             <Button variant="outline-success">Search</Button>
@@ -51,6 +59,7 @@ const Header = () => {
           <Navbar.Text>
             Welcome, <strong style={{ color: "white" }}>Shopper</strong>
           </Navbar.Text>
+          <FontAwesomeIcon className="shopping-cart" icon={faShoppingCart} />
         </Navbar.Collapse>
       </Container>
     </Navbar>

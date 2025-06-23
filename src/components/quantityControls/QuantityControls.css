@@ -1,0 +1,15 @@
+.quantity-controls {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.quantity-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

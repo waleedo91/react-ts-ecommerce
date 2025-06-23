@@ -1,0 +1,23 @@
+.apu-brand {
+  margin-right: 10px;
+  border-radius: 100%;
+  /* margin-bottom: 15px */
+}
+
+.brand-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.shopping-cart {
+  color: white;
+  margin-left: 10px;
+  margin-top: 5px;
+  height: 20px;
+}
+
+.search-input {
+  width: 30em;
+}
