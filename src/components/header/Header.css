@@ -21,3 +21,19 @@
 .search-input {
   width: 30em;
 }
+
+.cart-button {
+  color: white;
+  text-decoration: none;
+}
+
+.user-section {
+  display: flex;
+  gap: 15px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.login-header-button {
+  text-decoration: none;
+}

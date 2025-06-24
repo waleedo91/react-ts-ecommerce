@@ -1,6 +1,5 @@
 import axios from "axios";
-import { type Product } from "../types/types";
-
+import type { Product, LoginResponse, LoginCredentials } from "../types/types";
 
 const apiClient = axios.create({
   baseURL: "https://fakestoreapi.com",
@@ -24,3 +23,12 @@ export const fetchSingleProduct = async (
   return res.json();
 };
 
+export const login = async (
+  credentials: LoginCredentials
+): Promise<LoginResponse> => {
+  const response = await apiClient.post<LoginResponse>(
+    "/auth/login",
+    credentials
+  );
+  return response.data;
+};

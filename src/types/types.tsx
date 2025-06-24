@@ -11,3 +11,20 @@ export type CartItemType = {
   id: number;
   quantity: number;
 };
+
+export interface LoginResponse {
+  token: string;
+}
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface AuthState {
+  token: string | null;
+  username: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+}
