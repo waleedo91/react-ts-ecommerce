@@ -3,9 +3,10 @@ import { clearCart } from "../../store/feature/cartSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import QuantityControls from "../quantityControls/QuantityControls";
+import { Link } from "react-router-dom";
 
 import "./Cart.css";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -32,15 +33,21 @@ const Cart = () => {
               <Card key={item.id} className="cart-item-card">
                 <Card.Img src={item.image} className="cart-item-image" />
                 <h4>{item.title}</h4>
-                <div className='cart-control'>
+                <div className="cart-control">
                   <QuantityControls quantity={item.quantity} product={item} />
+                  <p>${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
               </Card>
             ))}
           </div>
           <div className="cart-total">
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
-            <button onClick={() => dispatch(clearCart())}>Clear Cart</button>
+            <Button variant="danger" onClick={() => dispatch(clearCart())}>
+              Clear Cart
+            </Button>
+            <Link to='/cart/checkout'>
+              <Button>Checkout</Button>
+            </Link>
           </div>
         </div>
       )}

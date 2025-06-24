@@ -8,6 +8,7 @@ import Cart from "./components/cart/Cart";
 import Login from "./components/login/Login";
 import FilteredProducts from "./components/filteredProducts/FilteredProducts";
 import RegisterForm from "./components/registerForm/RegisterForm";
+import Checkout from "./components/checkout/Checkout";
 
 import "./App.css";
 
@@ -26,6 +27,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/cart/checkout" element={<Checkout />} />
         </Routes>
       </main>
       <Footer />

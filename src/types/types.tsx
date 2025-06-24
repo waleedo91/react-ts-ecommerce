@@ -40,3 +40,24 @@ export interface RegisterResponse {
   email: string;
   username: string;
 }
+
+export interface ShippingAddress {
+  fullName: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface PaymentDetails {
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+}
+
+export interface CartItem {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+}
