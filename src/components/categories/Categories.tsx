@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCategories } from "../../api/fetchData";
 import { NavDropdown } from "react-bootstrap";
@@ -14,7 +15,13 @@ function Categories() {
   return (
     <div>
       {data?.map((category, index: number) => (
-        <NavDropdown.Item key={index}>{category}</NavDropdown.Item>
+        <NavDropdown.Item
+          as={Link}
+          to={`/products/category/${category}`}
+          key={index}
+        >
+          {category}
+        </NavDropdown.Item>
       ))}
     </div>
   );

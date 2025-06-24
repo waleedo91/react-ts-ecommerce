@@ -10,6 +10,14 @@ export const fetchCategories = async (): Promise<string[]> => {
   return response.data;
 };
 
+export const fetchProductByCategory = async (category: string) => {
+  const response = await fetch(
+    `https://fakestoreapi.com/products/category/${category}`
+  );
+  if (!response.ok) throw new Error("Failed to fetch Category");
+  return response.json();
+};
+
 export const fetchProducts = async (): Promise<Product[]> => {
   const response = await apiClient.get("/products");
   return response.data;

@@ -1,0 +1,35 @@
+.cart-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* gap: 20em; */
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100em;
+  /* border: 1px solid black; */
+  /* gap: 20px; */
+}
+
+.cart-item-card {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  width: 30em;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.cart-item-image {
+  height: 20em;
+  width: 10em;
+}
+
+.cart-total {
+  position: fixed;
+  right: 200px;
+}

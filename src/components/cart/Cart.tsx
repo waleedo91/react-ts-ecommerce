@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import QuantityControls from "../quantityControls/QuantityControls";
 
+import "./Cart.css";
+import { Card } from "react-bootstrap";
+
 const Cart = () => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.items);
@@ -23,19 +26,23 @@ const Cart = () => {
       {cartItems.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
-        <>
-          {cartItems.map((item) => (
-            <div key={item.id}>
-              <img src={item.image} />
-              <h4>{item.title}</h4>
-              <QuantityControls quantity={item.quantity} product={item} />
-            </div>
-          ))}
-          <div>
+        <div className="cart-container">
+          <div className="cart-item">
+            {cartItems.map((item) => (
+              <Card key={item.id} className="cart-item-card">
+                <Card.Img src={item.image} className="cart-item-image" />
+                <h4>{item.title}</h4>
+                <div className='cart-control'>
+                  <QuantityControls quantity={item.quantity} product={item} />
+                </div>
+              </Card>
+            ))}
+          </div>
+          <div className="cart-total">
             <h3>Total: ${totalPrice.toFixed(2)}</h3>
             <button onClick={() => dispatch(clearCart())}>Clear Cart</button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
