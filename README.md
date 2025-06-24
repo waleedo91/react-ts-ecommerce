@@ -1,54 +1,13 @@
-# React + TypeScript + Vite
+- Data being fetched in the api folder. No registering required or any secrete data. 
+- Hooks and Slices are all in there respectable folders. 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- Login form is only for the pre filled users in fake api store. 
+- Registering form is there for future projects so that a user may be able to create an account and be logged in automatically afterwards. 
+- Fake store api does no allow for such function. 
+- if you would like a list of users to test the login function. Please use postman or anything is similar.
+   - request the url https://fakestoreapi.com/users and pick whichever user you please. 
+- checkout is working but without any error handling at the moment seeing that fake store api does persist the information provided. 
+- the only thing that does persist is the cart using the authentication token that is created once you have logged in with the aliases provided by fake store api. 
+- Further more advanced functionality and better error handling will be created once a backend that will take the information and persist that information with having to rely on local storage or fake store api. 
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- download the folder form github and extract the folder to your desired folder. npm install and then npm run dev and enjoy! 
