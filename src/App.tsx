@@ -7,25 +7,29 @@ import Footer from "./components/footer/Footer";
 import Cart from "./components/cart/Cart";
 import Login from "./components/login/Login";
 import FilteredProducts from "./components/filteredProducts/FilteredProducts";
+import RegisterForm from "./components/registerForm/RegisterForm";
 
 import "./App.css";
 
 function App() {
   return (
-    <>
+    <div className="page-container">
       <Header />
-      <Routes>
-        <Route path="/products" element={<ProductsList />} />
-        <Route path="/products/:id" element={<ProductDisplay />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route
-          path="/products/category/:categoryName"
-          element={<FilteredProducts />}
-        />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+      <main className="content-wrapper">
+        <Routes>
+          <Route path="/products" element={<ProductsList />} />
+          <Route path="/products/:id" element={<ProductDisplay />} />m
+          <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/products/category/:categoryName"
+            element={<FilteredProducts />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<RegisterForm />} />
+        </Routes>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

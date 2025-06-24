@@ -1,0 +1,9 @@
+.register-form {
+  border: 2px solid black;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.register-container {
+  margin-bottom: 10px;
+}

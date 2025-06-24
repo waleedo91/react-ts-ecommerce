@@ -1,5 +1,10 @@
 import axios from "axios";
-import type { Product, LoginResponse, LoginCredentials } from "../types/types";
+import type {
+  Product,
+  LoginResponse,
+  LoginCredentials,
+  RegisterData,
+} from "../types/types";
 
 const apiClient = axios.create({
   baseURL: "https://fakestoreapi.com",
@@ -38,5 +43,10 @@ export const login = async (
     "/auth/login",
     credentials
   );
+  return response.data;
+};
+
+export const registerUser = async (userData: RegisterData) => {
+  const response = await apiClient.post("/users", userData);
   return response.data;
 };

@@ -1,7 +1,15 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { login as loginApi } from "../../api/fetchData";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import {
+  login as loginApi,
+  registerUser as registerApi,
+} from "../../api/fetchData";
 import type { AuthState } from "../../types/types";
 import { AxiosError } from "axios";
+import type { RegisterData, RegisterResponse } from "../../types/types";
 
 const initialState: AuthState = {
   token: localStorage.getItem("token") || null,
@@ -11,23 +19,41 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const loginUser = createAsyncThunk(
-  "auth/loginUser",
-  async (
-    Credentials: { username: string; password: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      const response = await loginApi(Credentials);
-      return { token: response.token, username: Credentials.username };
-    } catch (err) {
-      const error = err as AxiosError<{ message?: string }>;
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data.message || "Login Failed");
-      }
+export const loginUser = createAsyncThunk<
+  { token: string; username: string },
+  { username: string; password: string },
+  { rejectValue: string }
+>("auth/loginUser", async (Credentials, { rejectWithValue }) => {
+  try {
+    const response = await loginApi(Credentials);
+    return { token: response.token, username: Credentials.username };
+  } catch (err) {
+    const error = err as AxiosError<{ message?: string }>;
+    if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data.message || "Login Failed");
     }
+    return rejectWithValue("Login Failed");
   }
-);
+});
+
+export const registerUser = createAsyncThunk<
+  RegisterResponse,
+  RegisterData,
+  { rejectValue: string }
+>("auth/registerUser", async (userData: RegisterData, { rejectWithValue }) => {
+  try {
+    const response = await registerApi(userData);
+    return response;
+  } catch (err) {
+    const error = err as AxiosError<{ message?: string }>;
+    if (error.response && error.response.data) {
+      return rejectWithValue(
+        error.response.data.message || "Registration Failed"
+      );
+    }
+    return rejectWithValue("Registration Failed");
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -61,7 +87,25 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        registerUser.fulfilled,
+        (state, action: PayloadAction<RegisterResponse>) => {
+          state.loading = false;
+          state.username = action.payload.username;
+        }
+      )
+      .addCase(
+        registerUser.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload ?? "Unknown error occurred";
+        }
+      );
   },
 });
 

@@ -1,11 +1,21 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Container, Row, Col } from "react-bootstrap";
 import { fetchProductByCategory } from "../../api/fetchData";
 import { type Product } from "../../types/types";
+import QuantityControls from "../quantityControls/QuantityControls";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { addToCart } from "../../store/feature/cartSlice";
+
+import { Card, Container, Button } from "react-bootstrap";
+import { type RootState } from "../../store/store";
+
+import "./FilteredProducts.css";
 
 const FilteredProducts = () => {
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state: RootState) => state.cart.items);
   const { categoryName } = useParams();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   const {
     data: products = [],
@@ -26,24 +36,55 @@ const FilteredProducts = () => {
   return (
     <Container>
       <h2 className="mb-4 text-capitalize">{categoryName} Products</h2>
-      <Row>
-        {products.map((product: Product) => (
-          <Col key={product.id} md={6} lg={4}>
-            <Card className="mb-4">
-              <Card.Img
-                variant="top"
-                src={product.image}
-                style={{ height: "200px", objectFit: "contain" }}
-              />
-              <Card.Body>
-                <Card.Title>{product.title}</Card.Title>
-                <Card.Text>${product.price}</Card.Text>
-                {/* Link to single product or add to cart button here */}
+
+      <div className="filtered-list">
+        {products.map((product: Product) => {
+          const cartItem = cartItems?.find((item) => item.id === product.id);
+          const quantity = cartItem?.quantity || 0;
+
+          return (
+            <Card
+              key={product.id}
+              style={{ width: "18rem" }}
+              className="product-card"
+            >
+              <Link to={`/products/${product.id}`}>
+                <Card.Img
+                  variant="top"
+                  src={product.image}
+                  className="product-list-image"
+                />
+              </Link>
+              <Card.Body className="card-body">
+                <Card.Text className="product-list-title">
+                  {product.title}
+                </Card.Text>
+                <Card.Text>${product.price.toFixed(2)}</Card.Text>
+                {!isAuthenticated ? (
+                  <>
+                    <Link to="/login">
+                      <Button>Login</Button>
+                    </Link>
+                  </>
+                ) : (
+                  <div className="button-wrapper">
+                    {quantity === 0 ? (
+                      <Button
+                        variant="primary"
+                        onClick={() => dispatch(addToCart(product))}
+                      >
+                        Add to Cart
+                      </Button>
+                    ) : (
+                      <QuantityControls product={product} quantity={quantity} />
+                    )}
+                  </div>
+                )}
               </Card.Body>
             </Card>
-          </Col>
-        ))}
-      </Row>
+          );
+        })}
+      </div>
     </Container>
   );
 };

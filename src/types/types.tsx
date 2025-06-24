@@ -28,3 +28,15 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
 }
+
+export interface RegisterData {
+  email: string;
+  username: string;
+  password: string;
+}
+
+export interface RegisterResponse {
+  id: number;
+  email: string;
+  username: string;
+}

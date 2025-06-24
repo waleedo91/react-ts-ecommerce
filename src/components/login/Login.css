@@ -1,0 +1,16 @@
+.login-container {
+  margin: 0 auto;
+  width: 25% !important;
+  margin-top: 100px;
+  margin-bottom: 12.9rem;
+}
+
+.login-button {
+  margin-top: 10px;
+}
+
+.login-form {
+  border: 2px solid black;
+  padding: 15px;
+  border-radius: 10%;
+}

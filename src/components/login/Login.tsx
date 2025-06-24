@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { loginUser } from "../../store/feature/authSlice";
+
+import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,10 +30,10 @@ const Login = () => {
   if (isAuthenticated) return <p>You are Logged in!</p>;
 
   return (
-    <Container>
+    <Container className="login-container">
       <h2>Login</h2>
       {error && <Alert>{error}</Alert>}
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="login-form">
         <Form.Group>
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -52,8 +54,13 @@ const Login = () => {
             required
           />
         </Form.Group>
-        <Button type="submit">{loading ? "Logging in..." : "Login"}</Button>
+        <Button type="submit" className="login-button">
+          {loading ? "Logging in..." : "Login"}
+        </Button>
       </Form>
+      <h6>
+        Need an account? <Link to="/register">Register Here!</Link>
+      </h6>
     </Container>
   );
 };

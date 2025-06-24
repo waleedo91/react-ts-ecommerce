@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchProducts } from "../../api/fetchData";
 import { type Product } from "../../types/types";
-import { useSelector, useDispatch } from "react-redux";
-import type { RootState, AppDispatch } from "../../store//store";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import type { RootState } from "../../store//store";
 import { addToCart } from "../../store/feature/cartSlice";
 import { Link } from "react-router-dom";
 
@@ -12,12 +12,14 @@ import QuantityControls from "../quantityControls/QuantityControls";
 // TODO: Update the product component to a card for each product with required information for the Products List Page.
 
 const Products = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useAppDispatch();
+  const cartItems = useAppSelector((state: RootState) => state.cart.items);
   const { data, isLoading, isError } = useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: fetchProducts,
   });
+
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   if (isLoading) return <p>Loading Products....</p>;
   if (isError) return <p>No Products found</p>;
@@ -48,15 +50,28 @@ const Products = () => {
                 </Card.Text>
                 <Card.Text>${product.price.toFixed(2)}</Card.Text>
                 <div className="button-wrapper">
-                  {quantity === 0 ? (
-                    <Button
-                      variant="primary"
-                      onClick={() => dispatch(addToCart(product))}
-                    >
-                      Add to Cart
-                    </Button>
+                  {!isAuthenticated ? (
+                    <>
+                      <Link to="/login">
+                        <Button>Login</Button>
+                      </Link>
+                    </>
                   ) : (
-                    <QuantityControls product={product} quantity={quantity} />
+                    <div className="button-wrapper">
+                      {quantity === 0 ? (
+                        <Button
+                          variant="primary"
+                          onClick={() => dispatch(addToCart(product))}
+                        >
+                          Add to Cart
+                        </Button>
+                      ) : (
+                        <QuantityControls
+                          product={product}
+                          quantity={quantity}
+                        />
+                      )}
+                    </div>
                   )}
                 </div>
               </Card.Body>

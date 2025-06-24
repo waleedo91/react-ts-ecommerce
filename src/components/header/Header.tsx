@@ -4,14 +4,7 @@ import { useAppSelector } from "../../hooks/hooks";
 import Categories from "../categories/Categories";
 import Apu from "../../images/apu.png";
 
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  Button,
-  Form,
-} from "react-bootstrap";
+import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
@@ -56,15 +49,6 @@ const Header = () => {
               <Categories />
             </NavDropdown>
           </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2 search-input"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
