@@ -11,15 +11,33 @@ import "./QuantityControls.css";
 type Props = {
   product: Product;
   quantity: number;
+  onIncrease?: () => void;
+  onDecrease?: () => void;
 };
 
-const QuantityControls = ({ product, quantity }: Props) => {
+const QuantityControls = ({
+  product,
+  quantity,
+  onIncrease,
+  onDecrease,
+}: Props) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleDecrease = () => {
+    dispatch(decreaseQuantity(product.id));
+    if (onDecrease) onDecrease();
+  };
+
+  const handleIncrease = () => {
+    dispatch(addToCart(product));
+    if (onIncrease) onIncrease();
+  };
+
   return (
     <div className="quantity-controls">
       <Button
         variant="outline-danger"
-        onClick={() => dispatch(decreaseQuantity(product.id))}
+        onClick={handleDecrease}
         className="quantity-button"
       >
         {quantity === 1 ? <FontAwesomeIcon icon={faTrash} /> : "-"}
@@ -27,7 +45,7 @@ const QuantityControls = ({ product, quantity }: Props) => {
       <span>{quantity}</span>
       <Button
         variant="outline-success"
-        onClick={() => dispatch(addToCart(product))}
+        onClick={handleIncrease}
         className="quantity-button"
       >
         +

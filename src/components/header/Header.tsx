@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import Categories from "../categories/Categories";
 import Apu from "../../images/apu.png";
 
@@ -13,16 +15,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 
-// TODO: Create link for categories that filter only products with that category. 
+// TODO: Create link for categories that filter only products with that category.
 // TODO: Update Welcome Shopper to a login and logout button as well as the logged in users name rather than shopper.
-// TODO: update cart logo to show how many items are currently in users cart. 
-
+// TODO: update cart logo to show how many items are currently in users cart.
 
 const Header = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
       <Container fluid>
-        <Navbar.Brand href="#" className="brand-flex">
+        <Navbar.Brand as={Link} to="/products" className="brand-flex">
           <img
             alt=""
             src={Apu}
@@ -39,7 +40,9 @@ const Header = () => {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="#action1">Home</Nav.Link>
+            <Nav.Link as={Link} to="/products">
+              Home
+            </Nav.Link>
 
             <NavDropdown title="Categories" id="navbarScrollingDropdown">
               <Categories />

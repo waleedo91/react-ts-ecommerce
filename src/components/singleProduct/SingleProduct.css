@@ -1,0 +1,29 @@
+.single-product {
+  display: flex;
+  flex-direction: row;
+  /* justify-items: center; */
+  gap: 10%;
+  margin: 0 auto;
+  /* border: 2px solid black; */
+  height: 81.2vh;
+  margin-top: 20px;
+}
+
+.product-image-container {
+  padding: 10px;
+  margin-bottom: 1.2em;
+  width: 30%;
+  height: 30em !important;
+  margin-left: 30px;
+  text-align: center;
+}
+
+.product-image {
+  height: 25em;
+  margin-top: 20px;
+}
+
+.product-info-container {
+  height: 30em !important;
+  width: 50%;
+}

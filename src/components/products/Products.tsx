@@ -4,6 +4,7 @@ import { type Product } from "../../types/types";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../../store//store";
 import { addToCart } from "../../store/feature/cartSlice";
+import { Link } from "react-router-dom";
 
 import { Card, Button } from "react-bootstrap";
 import "./Products.css";
@@ -34,16 +35,18 @@ const Products = () => {
               style={{ width: "18rem" }}
               className="product-card"
             >
-              <Card.Img
-                variant="top"
-                src={product.image}
-                className="product-list-image"
-              />
+              <Link to={`/products/${product.id}`}>
+                <Card.Img
+                  variant="top"
+                  src={product.image}
+                  className="product-list-image"
+                />
+              </Link>
               <Card.Body className="card-body">
                 <Card.Text className="product-list-title">
                   {product.title}
                 </Card.Text>
-                <Card.Text>${product.price}</Card.Text>
+                <Card.Text>${product.price.toFixed(2)}</Card.Text>
                 <div className="button-wrapper">
                   {quantity === 0 ? (
                     <Button
