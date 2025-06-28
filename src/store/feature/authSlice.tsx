@@ -4,16 +4,15 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import {
-  login as loginApi,
-  registerUser as registerApi,
-} from "../../api/fetchData";
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../../config/firebase";
 import type { AuthState } from "../../types/types";
-import { AxiosError } from "axios";
-import type { RegisterData, RegisterResponse } from "../../types/types";
+import type { RegisterData } from "../../types/types";
 
 const initialState: AuthState = {
-  token: localStorage.getItem("token") || null,
-  username: localStorage.getItem("username") || null,
+  username: null,
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
@@ -23,35 +22,48 @@ export const loginUser = createAsyncThunk<
   { token: string; username: string },
   { username: string; password: string },
   { rejectValue: string }
->("auth/loginUser", async (Credentials, { rejectWithValue }) => {
+>("auth/loginUser", async ({ username, password }, { rejectWithValue }) => {
   try {
-    const response = await loginApi(Credentials);
-    return { token: response.token, username: Credentials.username };
-  } catch (err) {
-    const error = err as AxiosError<{ message?: string }>;
-    if (error.response && error.response.data) {
-      return rejectWithValue(error.response.data.message || "Login Failed");
+    const userCredentials = await signInWithEmailAndPassword(
+      auth,
+      username,
+      password
+    );
+    const user = userCredentials.user;
+    const token = await user.getIdToken();
+    return {
+      token,
+      username: user.email ?? username,
+    };
+  } catch (err: unknown) {
+    let message = "Login Failed";
+    if (err instanceof Error) {
+      message = err.message;
     }
-    return rejectWithValue("Login Failed");
+    return rejectWithValue(message);
   }
 });
 
 export const registerUser = createAsyncThunk<
-  RegisterResponse,
+  { username: string },
   RegisterData,
   { rejectValue: string }
->("auth/registerUser", async (userData: RegisterData, { rejectWithValue }) => {
+>("auth/registerUser", async ({ email, password }, { rejectWithValue }) => {
   try {
-    const response = await registerApi(userData);
-    return response;
-  } catch (err) {
-    const error = err as AxiosError<{ message?: string }>;
-    if (error.response && error.response.data) {
-      return rejectWithValue(
-        error.response.data.message || "Registration Failed"
-      );
+    const userCredentials = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return { username: userCredentials.user.email ?? email };
+  } catch (err: unknown) {
+    let message = "Registration Failed";
+
+    if (err instanceof Error) {
+      message = err.message;
     }
-    return rejectWithValue("Registration Failed");
+
+    return rejectWithValue(message);
   }
 });
 
@@ -60,7 +72,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.token = null;
       state.username = null;
       state.isAuthenticated = false;
       state.error = null;
@@ -73,7 +84,6 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         if (!action.payload) return;
         state.loading = false;
-        state.token = action.payload.token;
         state.username = action.payload.username;
         state.isAuthenticated = true;
 
@@ -92,13 +102,11 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        registerUser.fulfilled,
-        (state, action: PayloadAction<RegisterResponse>) => {
-          state.loading = false;
-          state.username = action.payload.username;
-        }
-      )
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.username = action.payload.username;
+        state.isAuthenticated = true;
+      })
       .addCase(
         registerUser.rejected,
         (state, action: PayloadAction<string | undefined>) => {

@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;
+  id: string;
   title: string;
   price: number;
   description: string;
@@ -14,24 +14,24 @@ export type CartItemType = {
 
 export interface LoginResponse {
   token: string;
+  email: string;
+  uid: string;
 }
 
 export interface LoginCredentials {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface AuthState {
-  token: string | null;
-  username: string | null;
-  isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  isAuthenticated: boolean;
+  username: string | null;
 }
 
 export interface RegisterData {
   email: string;
-  username: string;
   password: string;
 }
 
