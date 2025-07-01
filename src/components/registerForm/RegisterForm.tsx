@@ -20,6 +20,9 @@ const RegisterForm = () => {
   const [fullname, setFullname] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -30,6 +33,9 @@ const RegisterForm = () => {
       fullname: fullname,
       phone,
       address,
+      city,
+      postalCode,
+      country,
     };
 
     const registerResult = await dispatch(registerUser(registerData));
@@ -110,6 +116,38 @@ const RegisterForm = () => {
             onChange={(e) => setAddress(e.target.value)}
             required
             placeholder="Enter address"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>City</Form.Label>
+          <Form.Control
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+            placeholder="Enter city"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Postal Code</Form.Label>
+          <Form.Control
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            required
+            placeholder="Enter postal code"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Country</Form.Label>
+          <Form.Control
+            type="text"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            required
+            placeholder="Enter country"
           />
         </Form.Group>
         <Form.Group className="mb-3">

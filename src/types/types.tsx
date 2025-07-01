@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Product {
   id: string;
   title: string;
@@ -28,6 +30,10 @@ export interface UserData {
   email: string;
   phone: string;
   address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  payment?: PaymentInfo;
 }
 
 export interface AuthState {
@@ -35,9 +41,38 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  username: string | null;
-  fullname: string | null;
-  phone?: string;
+  user: {
+    username: string | null;
+    fullname: string | null;
+    phone?: string;
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
+}
+
+export interface UserProfile {
+  fullname: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  payment?: {
+    cardLast4: string;
+    expiryDate: string;
+  };
+}
+
+export interface UserState {
+  profile: UserProfile | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface PaymentInfo {
+  cardLast4: string;
+  expiryDate: string;
 }
 
 export interface RegisterData {
@@ -46,6 +81,9 @@ export interface RegisterData {
   fullname: string;
   phone?: string;
   address: string;
+  city: string;
+  postalCode: string;
+  country: string;
 }
 
 export interface RegisterResponse {
@@ -55,7 +93,23 @@ export interface RegisterResponse {
 }
 
 export interface ShippingAddress {
-  fullName: string;
+  fullname: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+  quantity: number;
+  image?: string;
+}
+
+export interface ShippingAddress {
+  fullname: string;
   address: string;
   city: string;
   postalCode: string;
@@ -68,9 +122,33 @@ export interface PaymentDetails {
   cvv: string;
 }
 
-export interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  quantity: number;
+export interface OrderPayload {
+  cartItems: CartItem[];
+  shippingAddress: ShippingAddress;
+  paymentDetails: PaymentDetails;
+}
+
+export interface OrderState {
+  loading: boolean;
+  error: string | null;
+  success: boolean;
+  lastOrderId: string | null;
+}
+
+export interface Order {
+  id: string;
+  createdAt: Timestamp;
+  cartItems: CartItem[];
+  shippingAddress: {
+    address: string;
+  };
+  payment?: {
+    cardLast4: string;
+    expiryDate: string;
+  };
+}
+
+export interface CartState {
+  userId: string | null;
+  items: CartItem[];
 }

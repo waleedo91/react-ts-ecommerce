@@ -14,6 +14,8 @@ import QuantityControls from "../quantityControls/QuantityControls";
 const Products = () => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state: RootState) => state.cart.items);
+  const currentUserId = useAppSelector((state) => state.auth.uid);
+
   const { data, isLoading, isError } = useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: fetchProducts,
@@ -61,7 +63,11 @@ const Products = () => {
                       {quantity === 0 ? (
                         <Button
                           variant="primary"
-                          onClick={() => dispatch(addToCart(product))}
+                          onClick={() =>
+                            dispatch(
+                              addToCart({ userId: currentUserId, product })
+                            )
+                          }
                         >
                           Add to Cart
                         </Button>

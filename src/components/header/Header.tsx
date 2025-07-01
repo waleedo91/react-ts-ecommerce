@@ -15,12 +15,12 @@ import Logout from "../logout/Logout";
 // TODO: update cart logo to show how many items are currently in users cart.
 
 const Header = () => {
-  const fullname = useAppSelector((state) => state.auth.fullname);
+  const fullname = useAppSelector((state) => state.auth.user.fullname);
   const cartCount = useAppSelector((state) =>
     state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
   );
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-  const username = useAppSelector((state) => state.auth.username);
+  const username = useAppSelector((state) => state.auth.user.username);
   const uid = useAppSelector((state) => state.auth.uid);
 
   return (

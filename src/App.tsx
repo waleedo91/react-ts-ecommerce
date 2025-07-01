@@ -1,3 +1,9 @@
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase";
+import { useAppDispatch } from "./hooks/hooks";
+import { loadUserCart, setUserProfile } from "./store/feature/authSlice";
+import { fetchUserProfile } from "./store/feature/userSlice";
 import { Routes, Route } from "react-router-dom";
 
 import ProductsList from "./pages/productsList/ProductsList";
@@ -14,6 +20,31 @@ import "./App.css";
 import UserDisplay from "./pages/userDisplay/UserDisplay";
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("user", user);
+      if (user) {
+        try {
+          const profile = await dispatch(fetchUserProfile(user.uid)).unwrap();
+
+          dispatch(
+            setUserProfile({
+              uid: user.uid,
+              username: user.email,
+              fullname: profile.fullname,
+            })
+          );
+          dispatch(loadUserCart(user.uid));
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
+
   return (
     <div className="page-container">
       <Header />

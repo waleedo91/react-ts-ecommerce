@@ -1,45 +1,45 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type {
-  CartItem,
-  ShippingAddress,
-  PaymentDetails,
-} from "../../types/types";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../../config/firebase";
+import type { OrderPayload, OrderState } from "../../types/types";
+import { type RootState } from "../store";
 
-interface OrderPayload {
-  cartItems: CartItem[];
-  shippingAddress: ShippingAddress;
-  paymentDetails: PaymentDetails;
-}
-
-export const submitOrder = createAsyncThunk(
-  "order/submitOrder",
-  async (orderData: OrderPayload, { rejectWithValue }) => {
-    try {
-      // Replace this with your real API call:
-      await new Promise((res) => setTimeout(res, 1500)); // mock delay
-
-      // You could do:
-      // const response = await apiClient.post('/orders', orderData);
-      // return response.data;
-
-      return { success: true };
-    } catch (error) {
-      console.error(error);
-      return rejectWithValue("Failed to place order");
+export const submitOrder = createAsyncThunk<
+  { success: boolean },
+  OrderPayload,
+  { state: RootState; rejectValue: string }
+>("order/submitOrder", async (orderData, { getState, rejectWithValue }) => {
+  try {
+    const uid = getState().auth.uid;
+    if (!uid) {
+      return rejectWithValue("User not logged in.");
     }
-  }
-);
+    const orderRef = collection(db, "users", uid, "orders");
 
-interface OrderState {
-  loading: boolean;
-  error: string | null;
-  success: boolean;
-}
+    const maskedPayment = {
+      cardLast4: orderData.paymentDetails.cardNumber.slice(-4),
+      expiryDate: orderData.paymentDetails.expiryDate,
+    };
+
+    const docRef = await addDoc(orderRef, {
+      cartItems: orderData.cartItems,
+      shippingAddress: orderData.shippingAddress,
+      payment: maskedPayment,
+      createdAt: serverTimestamp(),
+    });
+
+    return { success: true, orderId: docRef.id };
+  } catch (error) {
+    console.error(error);
+    return rejectWithValue("Failed to place order");
+  }
+});
 
 const initialState: OrderState = {
   loading: false,
   error: null,
   success: false,
+  lastOrderId: null,
 };
 
 const orderSlice = createSlice({

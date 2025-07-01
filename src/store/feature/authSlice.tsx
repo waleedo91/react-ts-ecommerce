@@ -10,14 +10,22 @@ import {
 import { auth, db } from "../../config/firebase";
 import type { AuthState, RegisterData } from "../../types/types";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { setCartItems } from "./cartSlice";
 
 const initialState: AuthState = {
   uid: null,
-  username: null,
-  fullname: null,
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
+  user: {
+    username: null,
+    fullname: null,
+    phone: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    country: "",
+  },
 };
 
 export const loginUser = createAsyncThunk<
@@ -62,7 +70,7 @@ export const registerUser = createAsyncThunk<
 >(
   "auth/registerUser",
   async (
-    { email, password, fullname, phone, address },
+    { email, password, fullname, phone, address, city, postalCode, country },
     { rejectWithValue }
   ) => {
     try {
@@ -78,6 +86,9 @@ export const registerUser = createAsyncThunk<
         fullname,
         phone,
         address,
+        city,
+        postalCode,
+        country,
         createdAt: serverTimestamp(),
       });
 
@@ -97,14 +108,36 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.username = null;
-      state.fullname = null;
+      state.uid = null;
+      state.user = {
+        username: null,
+        fullname: null,
+        phone: "",
+        address: "",
+        city: "",
+        postalCode: "",
+        country: "",
+      };
       state.isAuthenticated = false;
       state.error = null;
       localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("fullname");
       localStorage.removeItem("cart");
+      
+    },
+    setUserProfile(
+      state,
+      action: PayloadAction<{
+        uid: string;
+        username: string | null;
+        fullname: string | null;
+      }>
+    ) {
+      state.uid = action.payload.uid;
+      state.user.username = action.payload.username;
+      state.user.fullname = action.payload.fullname;
+      state.isAuthenticated = true;
     },
   },
   extraReducers: (builder) => {
@@ -116,8 +149,8 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         if (!action.payload) return;
         state.loading = false;
-        state.username = action.payload.username;
-        state.fullname = action.payload.fullname;
+        state.user.fullname = action.payload.fullname;
+        state.user.username = action.payload.username;
         state.uid = action.payload.uid;
         state.isAuthenticated = true;
 
@@ -137,7 +170,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.username = action.payload.username;
+        state.user.username = action.payload.username;
         state.isAuthenticated = true;
         state.uid = action.payload.uid;
       })
@@ -151,5 +184,16 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const loadUserCart = createAsyncThunk(
+  "auth/loadUserCart",
+  async (userId: string, { dispatch }) => {
+    const savedCart = localStorage.getItem(`cart_${userId}`);
+    if (savedCart) {
+      const cartItems = JSON.parse(savedCart);
+      dispatch(setCartItems(cartItems));
+    }
+  }
+);
+
+export const { logout, setUserProfile } = authSlice.actions;
 export default authSlice.reducer;

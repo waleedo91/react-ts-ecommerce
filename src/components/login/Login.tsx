@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Alert, Container } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { loginUser } from "../../store/feature/authSlice";
+import { loadUserCart, loginUser } from "../../store/feature/authSlice";
 
 import "./Login.css";
 
@@ -22,9 +22,13 @@ const Login = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginUser({ username, password }));
+    const resultAction = await dispatch(loginUser({ username, password }));
+    if (loginUser.fulfilled.match(resultAction)) {
+      const uid = resultAction.payload.uid;
+      dispatch(loadUserCart(uid));
+    }
   };
 
   if (isAuthenticated) return <p>You are Logged in!</p>;

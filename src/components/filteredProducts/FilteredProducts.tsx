@@ -14,6 +14,8 @@ import "./FilteredProducts.css";
 const FilteredProducts = () => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state: RootState) => state.cart.items);
+  const currentUserId = useAppSelector((state) => state.auth.uid);
+
   const { categoryName } = useParams();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
@@ -71,7 +73,11 @@ const FilteredProducts = () => {
                     {quantity === 0 ? (
                       <Button
                         variant="primary"
-                        onClick={() => dispatch(addToCart(product))}
+                        onClick={() =>
+                          dispatch(
+                            addToCart({ userId: currentUserId, product })
+                          )
+                        }
                       >
                         Add to Cart
                       </Button>
