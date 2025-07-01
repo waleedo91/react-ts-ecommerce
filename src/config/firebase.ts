@@ -3,13 +3,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlXOlLNVBK5LxubKADVBYWzpV9-r29qyo",
-  authDomain: "quick-ee-mart.firebaseapp.com",
-  projectId: "quick-ee-mart",
-  storageBucket: "quick-ee-mart.firebasestorage.app",
-  messagingSenderId: "443304093278",
-  appId: "1:443304093278:web:676570a64581f9f0fd36cf",
-  measurementId: "G-6L1F5H6JZJ",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

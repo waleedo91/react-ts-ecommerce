@@ -11,3 +11,17 @@
 - Further more advanced functionality and better error handling will be created once a backend that will take the information and persist that information with having to rely on local storage or fake store api. 
 
 - download the folder form github and extract the folder to your desired folder. npm install and then npm run dev and enjoy! 
+
+*** UPDATE *** 
+
+- Using firebase, so an account must be created at firebase.com and your own personal information will have to be saved in a .env file as such
+
+   - VITE_FIREBASE_API_KEY=[YOUR API KEY]
+   - VITE_FIREBASE_AUTH_DOMAIN=[YOUR DOMAIN]
+   - VITE_FIREBASE_PROJECT_ID=[YOUR PROJECT ID]
+   - VITE_FIREBASE_STORAGE_BUCKET=[YOUR STORAGE BUCKET]
+   - VITE_FIREBASE_MESSAGING_SENDER_ID=[YOUR SENDER ID]
+   - VITE_FIREBASE_APP_ID=[YOUR APP ID]
+   - VITE_FIREBASE_MEASUREMENT_ID=[YOUR MEASUREMENT ID]  
+
+- Everything is set up once you have created a .env file in your root folder and added your information. 
