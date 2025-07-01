@@ -35,7 +35,7 @@ const Login = () => {
       {error && <Alert>{error}</Alert>}
       <Form onSubmit={handleSubmit} className="login-form">
         <Form.Group>
-          <Form.Label>Username</Form.Label>
+          <Form.Label>Email</Form.Label>
           <Form.Control
             type="text"
             value={username}

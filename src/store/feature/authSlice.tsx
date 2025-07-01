@@ -7,19 +7,21 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../../config/firebase";
-import type { AuthState } from "../../types/types";
-import type { RegisterData } from "../../types/types";
+import { auth, db } from "../../config/firebase";
+import type { AuthState, RegisterData } from "../../types/types";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const initialState: AuthState = {
+  uid: null,
   username: null,
+  fullname: null,
   isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
   error: null,
 };
 
 export const loginUser = createAsyncThunk<
-  { token: string; username: string },
+  { token: string; username: string; fullname: string | null; uid: string },
   { username: string; password: string },
   { rejectValue: string }
 >("auth/loginUser", async ({ username, password }, { rejectWithValue }) => {
@@ -31,9 +33,18 @@ export const loginUser = createAsyncThunk<
     );
     const user = userCredentials.user;
     const token = await user.getIdToken();
+
+    // Fetch fullname from Firestore
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const fullname = userDoc.exists()
+      ? (userDoc.data().fullname as string)
+      : null;
+
     return {
       token,
       username: user.email ?? username,
+      fullname,
+      uid: user.uid,
     };
   } catch (err: unknown) {
     let message = "Login Failed";
@@ -45,27 +56,41 @@ export const loginUser = createAsyncThunk<
 });
 
 export const registerUser = createAsyncThunk<
-  { username: string },
+  { username: string; uid: string },
   RegisterData,
   { rejectValue: string }
->("auth/registerUser", async ({ email, password }, { rejectWithValue }) => {
-  try {
-    const userCredentials = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    return { username: userCredentials.user.email ?? email };
-  } catch (err: unknown) {
-    let message = "Registration Failed";
+>(
+  "auth/registerUser",
+  async (
+    { email, password, fullname, phone, address },
+    { rejectWithValue }
+  ) => {
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredentials.user;
 
-    if (err instanceof Error) {
-      message = err.message;
+      await setDoc(doc(db, "users", user.uid), {
+        email,
+        fullname,
+        phone,
+        address,
+        createdAt: serverTimestamp(),
+      });
+
+      return { username: user.email ?? email, uid: user.uid };
+    } catch (err: unknown) {
+      let message = "Registration Failed";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+      return rejectWithValue(message);
     }
-
-    return rejectWithValue(message);
   }
-});
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -73,26 +98,34 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.username = null;
+      state.fullname = null;
       state.isAuthenticated = false;
       state.error = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("fullname");
       localStorage.removeItem("cart");
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
         if (!action.payload) return;
         state.loading = false;
         state.username = action.payload.username;
+        state.fullname = action.payload.fullname;
+        state.uid = action.payload.uid;
         state.isAuthenticated = true;
 
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("username", action.payload.username);
-      })
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        if (action.payload.fullname) {
+          localStorage.setItem("fullname", action.payload.fullname);
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -106,6 +139,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.username = action.payload.username;
         state.isAuthenticated = true;
+        state.uid = action.payload.uid;
       })
       .addCase(
         registerUser.rejected,

@@ -23,16 +23,29 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface UserData {
+  fullname: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
 export interface AuthState {
+  uid: string | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
   username: string | null;
+  fullname: string | null;
+  phone?: string;
 }
 
 export interface RegisterData {
   email: string;
   password: string;
+  fullname: string;
+  phone?: string;
+  address: string;
 }
 
 export interface RegisterResponse {

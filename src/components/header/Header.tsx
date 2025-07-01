@@ -15,11 +15,13 @@ import Logout from "../logout/Logout";
 // TODO: update cart logo to show how many items are currently in users cart.
 
 const Header = () => {
+  const fullname = useAppSelector((state) => state.auth.fullname);
   const cartCount = useAppSelector((state) =>
     state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
   );
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const username = useAppSelector((state) => state.auth.username);
+  const uid = useAppSelector((state) => state.auth.uid);
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
@@ -54,7 +56,7 @@ const Header = () => {
           <Navbar.Text>
             {isAuthenticated ? (
               <div className="user-section">
-                {`Hello, ${username}`}
+                Hello, <Link to={`/user/${uid}`}>{fullname ?? username}</Link>
                 <Logout />
                 <Link to="/cart" className="cart-button">
                   <FontAwesomeIcon

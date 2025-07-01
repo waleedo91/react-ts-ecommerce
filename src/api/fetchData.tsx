@@ -3,6 +3,7 @@ import {
   getDocs,
   doc,
   getDoc,
+  setDoc,
   query,
   where,
 } from "firebase/firestore";
@@ -87,7 +88,7 @@ export const login = async (
 };
 
 export const registerUser = async (userData: RegisterData) => {
-  const { email, password } = userData;
+  const { email, password, fullname, phone } = userData;
 
   const userCredentials = await createUserWithEmailAndPassword(
     auth,
@@ -96,8 +97,17 @@ export const registerUser = async (userData: RegisterData) => {
   );
   const user = userCredentials.user;
 
+  await setDoc(doc(db, "users", user.uid), {
+    email,
+    fullname,
+    phone: phone || null,
+    createdAt: new Date().toISOString(),
+  });
+
   return {
     uid: user.uid,
     email: user.email,
+    fullname,
+    phone,
   };
 };

@@ -11,6 +11,7 @@ import RegisterForm from "./components/registerForm/RegisterForm";
 import Checkout from "./components/checkout/Checkout";
 
 import "./App.css";
+import UserDisplay from "./pages/userDisplay/UserDisplay";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
       <main className="content-wrapper">
         <Routes>
           <Route path="/products" element={<ProductsList />} />
-          <Route path="/products/:id" element={<ProductDisplay />} />m
+          <Route path="/products/:id" element={<ProductDisplay />} />
           <Route path="/cart" element={<Cart />} />
           <Route
             path="/products/category/:categoryName"
@@ -28,6 +29,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/cart/checkout" element={<Checkout />} />
+          <Route path="/user/:id" element={<UserDisplay />} />
         </Routes>
       </main>
       <Footer />
