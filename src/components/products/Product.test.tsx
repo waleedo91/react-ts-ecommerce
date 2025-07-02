@@ -3,7 +3,6 @@ import { screen, fireEvent } from "@testing-library/react";
 import Products from "./Products";
 import { vi } from "vitest";
 import * as hooks from "../../hooks/hooks";
-import * as reactQuery from "@tanstack/react-query";
 import { type Product } from "../../types/types";
 
 vi.mock("@tanstack/react-query", async () => {
