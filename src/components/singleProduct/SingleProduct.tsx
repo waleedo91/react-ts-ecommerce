@@ -6,12 +6,14 @@ import type { Product, CartItemType } from "../../types/types";
 import type { RootState } from "../../store/store";
 import { addToCart } from "../../store/feature/cartSlice";
 import QuantityControls from "../quantityControls/QuantityControls";
+import { useAppSelector } from "../../hooks/hooks";
 
 import "./SingleProduct.css";
 import { Card, Alert, Spinner, Button } from "react-bootstrap";
 
 const SingleProduct = () => {
   const { id } = useParams<{ id: string }>();
+  const currentUserId = useAppSelector((state) => state.auth.uid);
   const dispatch = useDispatch();
   const {
     data: product,
@@ -47,7 +49,9 @@ const SingleProduct = () => {
             {quantity === 0 ? (
               <Button
                 variant="primary"
-                onClick={() => dispatch(addToCart(product))}
+                onClick={() =>
+                  dispatch(addToCart({ userId: currentUserId, product }))
+                }
               >
                 Add to Cart
               </Button>

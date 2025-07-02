@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import "./QuantityControls.css";
+import { useAppSelector } from "../../hooks/hooks";
 
 type Props = {
   product: Product;
@@ -22,14 +23,14 @@ const QuantityControls = ({
   onDecrease,
 }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const currentUserId = useAppSelector((state) => state.auth.uid);
   const handleDecrease = () => {
-    dispatch(decreaseQuantity(product.id));
+    dispatch(decreaseQuantity({ userId: currentUserId, id: product.id }));
     if (onDecrease) onDecrease();
   };
 
   const handleIncrease = () => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({ userId: currentUserId, product }));
     if (onIncrease) onIncrease();
   };
 
