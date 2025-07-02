@@ -25,3 +25,7 @@
    - VITE_FIREBASE_MEASUREMENT_ID=[YOUR MEASUREMENT ID]  
 
 - Everything is set up once you have created a .env file in your root folder and added your information. 
+
+*** UPDATE ***
+
+- Project has been deployed via vercel. Website is 

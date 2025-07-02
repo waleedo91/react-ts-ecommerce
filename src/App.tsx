@@ -50,6 +50,7 @@ function App() {
       <Header />
       <main className="content-wrapper">
         <Routes>
+          <Route path="/" element={<ProductsList />} />
           <Route path="/products" element={<ProductsList />} />
           <Route path="/products/:id" element={<ProductDisplay />} />
           <Route path="/cart" element={<Cart />} />
