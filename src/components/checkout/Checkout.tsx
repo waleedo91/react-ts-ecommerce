@@ -88,6 +88,8 @@ const Checkout = () => {
       price: item.price,
       quantity: item.quantity,
       image: item.image,
+      category: item.category,
+      description: item.description,
     }));
 
     await dispatch(

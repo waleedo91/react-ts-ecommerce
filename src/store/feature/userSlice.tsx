@@ -1,7 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { UserProfile, UserState } from "../../types/types";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
@@ -58,10 +55,11 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'failed to fetch user profile.'
-      })
+        state.error = action.error.message || "failed to fetch user profile.";
+      });
   },
 });
 
 export const { clearUserProfile } = userSlice.actions;
 export default userSlice.reducer;
+export const userInitialState: UserState = initialState;

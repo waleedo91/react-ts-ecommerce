@@ -115,3 +115,4 @@ export const {
   setCartItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;
+export const cartInitialState: CartState = initialState;

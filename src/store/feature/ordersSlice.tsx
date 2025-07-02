@@ -72,3 +72,4 @@ const orderSlice = createSlice({
 
 export const { resetOrder } = orderSlice.actions;
 export default orderSlice.reducer;
+export const orderInitialState: OrderState = initialState;

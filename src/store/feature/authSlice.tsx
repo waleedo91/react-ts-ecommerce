@@ -124,7 +124,6 @@ const authSlice = createSlice({
       localStorage.removeItem("username");
       localStorage.removeItem("fullname");
       localStorage.removeItem("cart");
-      
     },
     setUserProfile(
       state,
@@ -197,3 +196,4 @@ export const loadUserCart = createAsyncThunk(
 
 export const { logout, setUserProfile } = authSlice.actions;
 export default authSlice.reducer;
+export const authInitialState: AuthState = initialState;
